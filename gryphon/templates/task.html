@@ -20,7 +20,8 @@
        
       <select 
         class="actions" 
-        onchange='taskAction(this, 
+        onchange='taskAction(this,
+                             "{{base_url}}",
                              "{{container_def.image}}",
                              {{container_def.environments | tojson | safe}},
                              {{auth_data | tojson | safe}},
