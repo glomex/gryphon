@@ -8,7 +8,7 @@
   
   
   <a class='action' target='_blank' href="https://console.aws.amazon.com/ecs/home?region={{region}}#/clusters/{{cluster.name}}/tasks/{{task.arn[-36:]}}">console</a>
-  
+
   <button class='action' onclick="stopTask('{{cluster.name}}', '{{task.arn}}')">stop</button>
 
   <ul class='container-list'>
@@ -21,7 +21,6 @@
       <select 
         class="actions" 
         onchange='taskAction(this,
-                             "{{base_url}}",
                              "{{container_def.image}}",
                              {{container_def.environments | tojson | safe}},
                              {{auth_data | tojson | safe}},

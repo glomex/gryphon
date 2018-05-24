@@ -59,11 +59,12 @@
       generatePicoModal(command, "10em", true).show();
     }
 
-    function execContainer(base_url, ip, task, containerName) {
+    function execContainer(ip, task, containerName) {
 
       var command = 'containerName="'+containerName+'";\n' +
         'taskArn=' + task + ';\n' +
-        'dockerCommand="CONTAINER_ID=\\`curl http://${base_url}:51678/v1/tasks?taskarn=\${taskArn} | jq -r \\".Containers[] | select(.Name==\\\\\\"\${containerName}\\\\\\").DockerId\\"\\`; sudo docker exec -it -u root \\${CONTAINER_ID} bash";\n' +
+        'ip=' + ip + ';\n' +
+        'dockerCommand="CONTAINER_ID=\\`curl http://\${ip}:51678/v1/tasks?taskarn=\${taskArn} | jq -r \\".Containers[] | select(.Name==\\\\\\"\${containerName}\\\\\\").DockerId\\"\\`; sudo docker exec -it -u root \\${CONTAINER_ID} bash";\n' +
         'ssh ' + sshArgs + ip + ' -t "set -ex; $dockerCommand"\n'
 
         generatePicoModal(command, "10em", true).show();
@@ -73,17 +74,18 @@
 
       var command = 'containerName="'+containerName+'";\n' +
         'taskArn=' + task + ';\n' +
-        'dockerCommand="CONTAINER_ID=\\`curl http://localhost:51678/v1/tasks?taskarn=\${taskArn} | jq -r \\".Containers[] | select(.Name==\\\\\\"\${containerName}\\\\\\").DockerId\\"\\`; sudo docker attach --sig-proxy=false \\${CONTAINER_ID}";\n' +
+        'ip=' + ip + ';\n' +
+        'dockerCommand="CONTAINER_ID=\\`curl http://${ip}:51678/v1/tasks?taskarn=\${taskArn} | jq -r \\".Containers[] | select(.Name==\\\\\\"\${containerName}\\\\\\").DockerId\\"\\`; sudo docker attach --sig-proxy=false \\${CONTAINER_ID}";\n' +
         'ssh ' + sshArgs + ip + ' -t "set -ex; $dockerCommand"\n'
 
         generatePicoModal(command, "10em", false).show();
     }
     
-    function taskAction(base_url, select, imageName, env, authData, ip, task, containerName, taskDefFamilyName) {
+    function taskAction(select, imageName, env, authData, ip, task, containerName, taskDefFamilyName) {
       var action = select.value;
 
       if (action == "exec") {
-        execContainer(base_url, ip, task, containerName);
+        execContainer(ip, task, containerName);
       } else if (action == "attach") {
         attachContainer(ip, task, containerName);
       } else if (action == "run") {

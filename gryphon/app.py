@@ -22,8 +22,6 @@ rootLogger.setLevel(logging.INFO)
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', "VGJAA^S&*ASKASP")
 
-BASE_URL = os.environ["BASE_URL"]
-
 
 @app.route('/health')
 def health():
@@ -41,7 +39,6 @@ def cluster_view(cluster_name):
     authorization_data = get_authorization()
     cluster = Cluster(name=cluster_name)
     return render_template('cluster.html',
-                           base_url=BASE_URL,
                            cluster=cluster,
                            auth_data=authorization_data,
                            region=region,
